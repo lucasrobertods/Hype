@@ -24,7 +24,7 @@ jobs:
         run: ./gradlew assembleDebug
 
   uploadAPK:
-    needs: buildAPK
+    needs: buildAndGenerateAPK
     runs-on: ubuntu-latest
     steps:
     - name: Upload APK on Build Artifacts
