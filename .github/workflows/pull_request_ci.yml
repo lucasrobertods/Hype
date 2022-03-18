@@ -1,10 +1,12 @@
 name: Pull Requests CI
+
 on:
   pull_request:
     branches: [ develop ]
 
 jobs:
-  setupJDK:
+  build:
+
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,31 +22,22 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-  buildAPK:
-    runs-on: ubuntu-latest
-    steps:
     - name: Build and genarate apk
       run: ./gradlew assembleDebug
 
-  uploadAPK:
-    runs-on: ubuntu-latest
-    steps:
     - name: Upload APK on Build Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: hype-homol-installable
         path: app/build/outputs/apk/debug/app-debug.apk
 
-  slackNotification:
-    name: Slack Notification
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
     - name: Slack Notification
       uses: rtCamp/action-slack-notify@v2
       env:
+        #SLACK_CHANNEL: general
         SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        SLACK_MESSAGE: 'PR Build concluído com sucesso!\nVeja: https://github.com///actions/runs/'
+        #SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: 'PR Build concluído com sucesso!'
         SLACK_TITLE: Android Build
         SLACK_USERNAME: Hype
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
