@@ -1,32 +1,46 @@
-name: Pull Requests CI
-
+name: Pull Requests Builds
 on:
   pull_request:
-    branches: [ develop, main ]
+    branches: [ develop ]
 
 jobs:
-  build:
-
+  buildAndUploadAPK:
+    name: Build and Upload
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
 
     steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      - name: Build and genarate apk
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK on Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: hype-homol-installable
+          path: app/build/outputs/apk/debug/app-debug.apk
+
+  slackNotification:
+    needs: buildAndUploadAPK
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 11
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
-
-    - name: Build and genarate apk
-      run: ./gradlew assembleDebug
-
-    - name: Upload APK on Build Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: app
-        path: app/build/outputs/apk/debug/app-debug.apk
+    - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        SLACK_MESSAGE: "PR Build concluído com sucesso!\nVeja: https://github.com/lucasrobertods/Hype/actions/runs/${{ github.run_id }}"
+        SLACK_TITLE: Android Build
+        SLACK_USERNAME: Hype
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
