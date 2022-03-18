@@ -4,7 +4,7 @@ on:
     branches: [ develop ]
 
 jobs:
-  buildAndGenerateAPK:
+  buildAndUploadAPK:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -23,18 +23,14 @@ jobs:
       - name: Build and genarate apk
         run: ./gradlew assembleDebug
 
-  uploadAPK:
-    needs: buildAndGenerateAPK
-    runs-on: ubuntu-latest
-    steps:
-    - name: Upload APK on Build Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: hype-homol-installable
-        path: app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload APK on Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: hype-homol-installable
+          path: app/build/outputs/apk/debug/app-debug.apk
 
   slackNotification:
-    needs: uploadAPK
+    needs: buildAndUploadAPK
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
