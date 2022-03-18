@@ -1,5 +1,4 @@
 name: Pull Requests CI
-
 on:
   pull_request:
     branches: [ develop ]
@@ -43,9 +42,7 @@ jobs:
     - name: Slack Notification
       uses: rtCamp/action-slack-notify@v2
       env:
-        #SLACK_CHANNEL: general
         SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        #SLACK_ICON: https://github.com/rtCamp.png?size=48
         SLACK_MESSAGE: 'PR Build concluído com sucesso!\nVeja: https://github.com///actions/runs/' + ${{ github.run_id }}
         SLACK_TITLE: Android Build
         SLACK_USERNAME: Hype
