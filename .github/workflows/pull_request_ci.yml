@@ -36,6 +36,7 @@ jobs:
         path: app/build/outputs/apk/debug/app-debug.apk
 
   slackNotification:
+    name: Slack Notification
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
