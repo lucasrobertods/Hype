@@ -4,7 +4,7 @@ on:
     branches: [ develop ]
 
 jobs:
-  setupJDK:
+  buildAndGenerateAPK:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,10 +20,6 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-  buildAPK:
-    needs: setupJDK
-    runs-on: ubuntu-latest
-    steps:
     - name: Build and genarate apk
       run: ./gradlew assembleDebug
 
