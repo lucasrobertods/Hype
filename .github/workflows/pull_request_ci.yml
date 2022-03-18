@@ -5,6 +5,7 @@ on:
 
 jobs:
   buildAndUploadAPK:
+    name: Build and Upload
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -39,7 +40,7 @@ jobs:
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        SLACK_MESSAGE: "PR Build concluído com sucesso!\nVeja: https://github.com/lucasrobertods/Hype/actions/runs/${{ job.status }}"
+        SLACK_MESSAGE: "PR Build concluído com sucesso!\nVeja: https://github.com/lucasrobertods/Hype/actions/runs/${{ github.run_id }}"
         SLACK_TITLE: Android Build
         SLACK_USERNAME: Hype
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
