@@ -32,7 +32,7 @@ class EventAdapter : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
             Glide.with(itemView.context).load(event.photo).into(binding.imgEvent)
             binding.tvName.text = event.name
             binding.tvDate.text = event.date
-            binding.tvHour.text = event.date
+            binding.tvHour.text = event.hour
             binding.tvLocation.text = event.location
 
             itemView.setOnClickListener {

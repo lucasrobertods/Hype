@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import br.com.hype.R
 import br.com.hype.databinding.FragmentHomeBinding
 import br.com.hype.presenter.home.adapter.EventAdapter
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -32,6 +29,7 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         homeViewModel.events.observe(viewLifecycleOwner, {
+            binding.swipeRefresh.isRefreshing = false
             eventAdapter.setEventList(it)
         })
 
@@ -50,6 +48,12 @@ class HomeFragment : Fragment() {
             }
         }
         binding.recyclerView.adapter = eventAdapter
+        binding.swipeRefresh.apply {
+            setOnRefreshListener {
+                isRefreshing = true
+                homeViewModel.getEvents()
+            }
+        }
     }
 
     override fun onDestroyView() {
