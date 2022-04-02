@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.hype.R
 import br.com.hype.databinding.ItemFilterBinding
 import br.com.hype.domain.model.Event
+import br.com.hype.presenter.home.adapter.MenuFilter
 
 class FilterAdapter : RecyclerView.Adapter<FilterAdapter.FilterViewHolder>() {
 
     private var eventList = listOf<Event>()
+    private lateinit var menuFilter: MenuFilter
     var onItemClick: ((event: Event) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilterViewHolder {
@@ -27,15 +29,23 @@ class FilterAdapter : RecyclerView.Adapter<FilterAdapter.FilterViewHolder>() {
     inner class FilterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemFilterBinding.bind(itemView)
         fun bind(event: Event) {
-            binding.tvFilter.text = event.artist
+            when(menuFilter) {
+                MenuFilter.ARTIST -> binding.tvFilter.text = event.artist
+                MenuFilter.LOCAL -> binding.tvFilter.text = event.location
+                MenuFilter.CITY -> binding.tvFilter.text = event.city
+                MenuFilter.DATE -> binding.tvFilter.text = event.date
+                MenuFilter.HOUR -> binding.tvFilter.text = event.hour
+            }
+
             itemView.setOnClickListener {
                 onItemClick?.invoke(event)
             }
         }
     }
 
-    fun setEventList(eventList: List<Event>) {
+    fun setEventList(eventList: List<Event>, menuFilter: MenuFilter) {
         this.eventList = eventList
+        this.menuFilter = menuFilter
         notifyDataSetChanged()
     }
 

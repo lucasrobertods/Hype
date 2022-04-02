@@ -11,6 +11,8 @@ import br.com.hype.domain.model.Event
 import br.com.hype.presenter.base.extensions.show
 import br.com.hype.presenter.filter.FilterBottomSheetFragment
 import br.com.hype.presenter.home.adapter.EventAdapter
+import br.com.hype.presenter.home.adapter.MenuFilter
+import br.com.hype.presenter.home.adapter.MenuFilterAdapter
 import br.com.hype.presenter.home.viewmodel.HomeViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -24,6 +26,7 @@ class HomeFragment : Fragment() {
     private var eventList = listOf<Event>()
 
     private lateinit var eventAdapter: EventAdapter
+    private lateinit var menuFilterAdapter: MenuFilterAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,13 +58,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.tvFilter.setOnClickListener {
-            showFilterDialog()
+        binding.imgClearFilter.setOnClickListener {
+            updateEventList(eventList)
         }
     }
 
-    private fun showFilterDialog() {
-        FilterBottomSheetFragment.newInstance(eventList).apply {
+    private fun showFilterDialog(menuFilter: MenuFilter) {
+        FilterBottomSheetFragment.newInstance(eventList, menuFilter).apply {
             onFiltered = {
                 updateEventList(it)
             }
@@ -91,6 +94,13 @@ class HomeFragment : Fragment() {
             }
         }
         binding.recyclerView.adapter = eventAdapter
+
+        menuFilterAdapter = MenuFilterAdapter().apply {
+            onItemClick = { menuFilter ->
+                showFilterDialog(menuFilter)
+            }
+        }
+        binding.recyclerViewFilter.adapter = menuFilterAdapter
     }
 
     private fun refreshEvents() {

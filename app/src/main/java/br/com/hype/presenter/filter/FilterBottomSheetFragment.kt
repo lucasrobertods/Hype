@@ -8,12 +8,14 @@ import br.com.hype.databinding.FragmentFilterBottomSheetBinding
 import br.com.hype.domain.model.Event
 import br.com.hype.presenter.base.BaseBottomSheetFragment
 import br.com.hype.presenter.filter.adapter.FilterAdapter
+import br.com.hype.presenter.home.adapter.MenuFilter
 
 class FilterBottomSheetFragment : BaseBottomSheetFragment() {
 
     private lateinit var binding: FragmentFilterBottomSheetBinding
 
     private var eventList = listOf<Event>()
+    private lateinit var menuFilter: MenuFilter
     var onFiltered: ((eventList: List<Event>) -> Unit)? = null
 
     private lateinit var filterAdapter: FilterAdapter
@@ -37,11 +39,18 @@ class FilterBottomSheetFragment : BaseBottomSheetFragment() {
     }
 
     private fun setupAdapter() {
+        binding.tvTitle.text = menuFilter.value
         filterAdapter = FilterAdapter().apply {
-            setEventList(eventList)
+            setEventList(eventList, menuFilter)
             onItemClick = { selectedEvent ->
                 val listFiltered = eventList.filter {
-                    it.artist == selectedEvent.artist
+                    when(menuFilter) {
+                        MenuFilter.ARTIST -> it.artist == selectedEvent.artist
+                        MenuFilter.LOCAL -> it.location == selectedEvent.location
+                        MenuFilter.CITY -> it.city == selectedEvent.city
+                        MenuFilter.DATE -> it.date == selectedEvent.date
+                        MenuFilter.HOUR -> it.hour == selectedEvent.hour
+                    }
                 }
                 onFiltered?.invoke(listFiltered)
                 dismiss()
@@ -51,9 +60,10 @@ class FilterBottomSheetFragment : BaseBottomSheetFragment() {
     }
 
     companion object {
-        fun newInstance(eventList: List<Event>) =
+        fun newInstance(eventList: List<Event>, menuFilter: MenuFilter) =
             FilterBottomSheetFragment().apply {
                 this.eventList = eventList
+                this.menuFilter = menuFilter
             }
     }
 }
