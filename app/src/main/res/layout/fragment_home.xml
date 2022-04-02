@@ -22,31 +22,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/appCompatTextView"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgClearFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hypados"
-            android:textColor="@color/black"
-            android:paddingVertical="16dp"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginStart="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Filtros"
-            android:textColor="@color/black"
-            android:layout_marginEnd="16dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerViewFilter"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/appCompatTextView" />
+            android:layout_marginEnd="@dimen/spacing_medium_regular"
+            app:layout_constraintTop_toTopOf="@+id/recyclerViewFilter"
+            app:srcCompat="@drawable/ic_close" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewFilter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/spacing_medium_regular"
+            android:layout_marginEnd="@dimen/spacing_medium_regular"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toStartOf="@+id/imgClearFilter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat"
+            tools:itemCount="10"
+            tools:listitem="@layout/item_menu_filter" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -57,7 +55,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewFilter" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
