@@ -12,16 +12,20 @@ data class EventResponse(
     val link: String? = "",
     val date: String? = "",
     val hour: String? = "",
+    val maps: String? = ""
 )
 
-fun EventResponse.toModel() = Event(
-    name = name.orEmpty(),
-    artist = artist.orEmpty(),
-    photo = photo.orEmpty(),
-    description = description.orEmpty(),
-    city = city.orEmpty(),
-    location = location.orEmpty(),
-    link = link.orEmpty(),
-    date = date.orEmpty(),
-    hour = hour.orEmpty()
-)
+fun EventResponse.toModel(): Event {
+        return Event(
+        name = name.orEmpty(),
+        artist = artist.orEmpty(),
+        photo = photo.orEmpty(),
+        description = description.orEmpty(),
+        city = city.orEmpty(),
+        location = location.orEmpty(),
+        link = link.orEmpty(),
+        date = date.orEmpty(),
+        hour = hour.orEmpty(),
+        maps = maps.orEmpty()
+    )
+}

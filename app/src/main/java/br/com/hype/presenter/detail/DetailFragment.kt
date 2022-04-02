@@ -52,14 +52,22 @@ class DetailFragment : Fragment() {
         }
     }
 
+
     private fun setupListeners() {
         binding.btnNavigate.setOnClickListener {
             val openURL = Intent(Intent.ACTION_VIEW)
             openURL.data = Uri.parse(args.event.link)
             startActivity(openURL)
+
         }
         binding.llReminder.setOnClickListener {
             addEvent()
+        }
+
+        binding.tvLocation.setOnClickListener {
+            val openURL = Intent(Intent.ACTION_VIEW)
+            openURL.data = Uri.parse(args.event.maps)
+            startActivity(openURL)
         }
     }
 

@@ -12,6 +12,7 @@ data class Event(
     val link: String,
     val date: String,
     val hour: String,
+    val maps: String,
 ) : Serializable {
     fun toUi() = this
 }
