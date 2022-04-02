@@ -5,7 +5,7 @@ import br.com.hype.data.repository.EventRepository
 import br.com.hype.data.repository.EventRepositoryImpl
 import br.com.hype.domain.usecase.GetEvent
 import br.com.hype.domain.usecase.GetEventUseCase
-import br.com.hype.presenter.home.HomeViewModel
+import br.com.hype.presenter.home.viewmodel.HomeViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

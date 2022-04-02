@@ -1,4 +1,4 @@
-package br.com.hype.presenter.home
+package br.com.hype.presenter.home.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

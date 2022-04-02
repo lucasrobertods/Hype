@@ -7,7 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import br.com.hype.databinding.FragmentHomeBinding
+import br.com.hype.domain.model.Event
+import br.com.hype.presenter.base.extensions.show
+import br.com.hype.presenter.filter.FilterBottomSheetFragment
 import br.com.hype.presenter.home.adapter.EventAdapter
+import br.com.hype.presenter.home.viewmodel.HomeViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : Fragment() {
@@ -16,6 +20,8 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
 
     private val binding get() = _binding!!
+
+    private var eventList = listOf<Event>()
 
     private lateinit var eventAdapter: EventAdapter
 
@@ -28,18 +34,55 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        homeViewModel.events.observe(viewLifecycleOwner, {
-            binding.swipeRefresh.isRefreshing = false
-            eventAdapter.setEventList(it)
-        })
-
         setupView()
 
         return root
     }
 
+    private fun handleObservers() {
+        homeViewModel.events.observe(viewLifecycleOwner, {
+            binding.swipeRefresh.isRefreshing = false
+            eventList = it
+            updateEventList(it)
+        })
+    }
+
     private fun setupView() {
-        homeViewModel.getEvents()
+        handleObservers()
+        setupAdapters()
+        setupRefresh()
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        binding.tvFilter.setOnClickListener {
+            showFilterDialog()
+        }
+    }
+
+    private fun showFilterDialog() {
+        FilterBottomSheetFragment.newInstance(eventList).apply {
+            onFiltered = {
+                updateEventList(it)
+            }
+        }.show(childFragmentManager)
+    }
+
+    private fun updateEventList(list: List<Event>) {
+        eventAdapter.setEventList(list)
+    }
+
+    private fun setupRefresh() {
+        refreshEvents()
+        binding.swipeRefresh.apply {
+            setOnRefreshListener {
+                isRefreshing = true
+                refreshEvents()
+            }
+        }
+    }
+
+    private fun setupAdapters() {
         eventAdapter = EventAdapter().apply {
             onItemClick = { event ->
                 findNavController().navigate(
@@ -48,12 +91,10 @@ class HomeFragment : Fragment() {
             }
         }
         binding.recyclerView.adapter = eventAdapter
-        binding.swipeRefresh.apply {
-            setOnRefreshListener {
-                isRefreshing = true
-                homeViewModel.getEvents()
-            }
-        }
+    }
+
+    private fun refreshEvents() {
+        homeViewModel.getEvents()
     }
 
     override fun onDestroyView() {

@@ -13,6 +13,7 @@ class EventAdapter : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
     private var eventList = listOf<Event>()
     var onItemClick : ((event: Event) -> Unit)? = null
+    var onFilterClick : ((eventList: List<Event>) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_event, parent, false)
@@ -45,5 +46,7 @@ class EventAdapter : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
         this.eventList = eventList
         notifyDataSetChanged()
     }
+
+    fun getEventList() = this.eventList
 
 }
