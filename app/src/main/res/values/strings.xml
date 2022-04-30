@@ -5,4 +5,6 @@
     <string name="title_notifications">Notifications</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home_fragment_welcome">Seja bem vindx</string>
+    <string name="home_fragment_welcome_name">Seja bem vindx, %s!</string>
 </resources>

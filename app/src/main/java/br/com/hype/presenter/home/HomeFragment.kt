@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import br.com.hype.R
 import br.com.hype.databinding.FragmentHomeBinding
 import br.com.hype.domain.model.Event
 import br.com.hype.presenter.base.extensions.show
@@ -14,6 +15,7 @@ import br.com.hype.presenter.home.adapter.EventAdapter
 import br.com.hype.presenter.home.adapter.MenuFilter
 import br.com.hype.presenter.home.adapter.MenuFilterAdapter
 import br.com.hype.presenter.home.viewmodel.HomeViewModel
+import br.com.hype.presenter.login.SessionManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : Fragment() {
@@ -43,18 +45,25 @@ class HomeFragment : Fragment() {
     }
 
     private fun handleObservers() {
-        homeViewModel.events.observe(viewLifecycleOwner, {
+        homeViewModel.events.observe(viewLifecycleOwner) {
             binding.swipeRefresh.isRefreshing = false
             eventList = it
             updateEventList(it)
-        })
+        }
     }
 
     private fun setupView() {
+        setupUser()
         handleObservers()
         setupAdapters()
         setupRefresh()
         setupListeners()
+    }
+
+    private fun setupUser() {
+        SessionManager.user?.let {
+            binding.tvWelcome.text = getString(R.string.home_fragment_welcome_name, it.name.split(" ")[0])
+        }
     }
 
     private fun setupListeners() {
